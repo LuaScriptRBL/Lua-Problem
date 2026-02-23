@@ -1,20 +1,12 @@
-local service = "21335"; --Set your Platoboost Id 
+local service = 21335
 
-local secret = "792a3e60-ba18-4900-8057-93afac616726"; --Set Your Platoboost Api key
+local secret = "792a3e60-ba18-4900-8057-93afac616726"
 
 local useNonce = true; 
 
 local onMessage = function(message) game:GetService("StarterGui"):SetCore("ChatMakeSystemMessage", { Text = message; }) end;
 
- 
-
- 
-
 repeat task.wait(1) until game:IsLoaded() or game.Players.LocalPlayer;
-
- 
-
- 
 
 local requestSending = false;
 
@@ -23,9 +15,6 @@ local fSetClipboard, fRequest, fStringChar, fToString, fStringSub, fOsTime, fMat
 local cachedLink, cachedTime = "", 0;
 
 local HttpService = game:GetService("HttpService")
-
- 
-
 function lEncode(data)
 
     return HttpService:JSONEncode(data)
