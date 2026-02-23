@@ -47,7 +47,7 @@ local function SetVelocity(part, enable)
         lv.Attachment0 = att
     end
 end
-_G.AutoLeviathan = false
+
 _G.SelectedWeapons = {}
 _G.MeleeSkills = {["Z"] = true, ["X"] = true, ["C"] = true, ["V"] = true}
 _G.FruitSkills = {["Z"] = true, ["X"] = true, ["C"] = true, ["V"] = true, ["F"] = true}
@@ -94,6 +94,7 @@ _G.RunAllSkills = function()
     if _G.SelectedWeapons["Sword"] then ExecuteSkills(_G.SwordSkills, "Sword") end
     if _G.SelectedWeapons["Gun"] then ExecuteSkills(_G.GunSkills, "Gun") end
 end
+_G.AutoLeviathan = false
 local Speed = 350
 
 local function StartLeviathanFix()
@@ -312,7 +313,8 @@ Tabs.HuntLeviathan:AddToggle("AutoLeviathan", {
     Default = false,
     Callback = function(Value)
         _G.AutoLeviathan = Value
-        if Value then StartLeviathanFix() end
+        if Value then StartLeviathanFix()
+            end
     end
 })
 
@@ -321,7 +323,8 @@ Tabs.Main:AddDropdown("WeaponSelect", {
     Values = {"Melee", "Sword", "Blox Fruit", "Gun"},
     Default = {},
     Multi = true,
-    Callback = function(Value) _G.SelectedWeapons = Value end
+    Callback = function(Value) _G.SelectedWeapons = Value
+        end
 })
 
 Tabs.SettingHunt:AddDropdown("MeleeSkills", {
@@ -330,7 +333,8 @@ Tabs.SettingHunt:AddDropdown("MeleeSkills", {
     Default = {"Z", "X", "C", "V"},
     Multi = true,
     Callback = function(Value)
-        for _, key in pairs({"Z", "X", "C", "V"}) do _G.MeleeSkills[key] = Value[key] or false end
+        for _, key in pairs({"Z", "X", "C", "V"}) do _G.MeleeSkills[key] = Value[key] or false 
+            end
     end
 })
 
@@ -340,7 +344,8 @@ Tabs.SettingHunt:AddDropdown("FruitSkills", {
     Default = {"Z", "X", "C", "V", "F"},
     Multi = true,
     Callback = function(Value)
-        for _, key in pairs({"Z", "X", "C", "V", "F"}) do _G.FruitSkills[key] = Value[key] or false end
+        for _, key in pairs({"Z", "X", "C", "V", "F"}) do _G.FruitSkills[key] = Value[key] or false
+            end
     end
 })
 
@@ -350,7 +355,8 @@ Tabs.SettingHunt:AddDropdown("SwordSkills", {
     Default = {"Z", "X"},
     Multi = true,
     Callback = function(Value)
-        for _, key in pairs({"Z", "X"}) do _G.SwordSkills[key] = Value[key] or false end
+        for _, key in pairs({"Z", "X"}) do _G.SwordSkills[key] = Value[key] or false
+            end
     end
 })
 
@@ -360,8 +366,9 @@ Tabs.SettingHunt:AddDropdown("GunSkills", {
     Default = {"Z", "X"},
     Multi = true,
     Callback = function(Value)
-        for _, key in pairs({"Z", "X"}) do _G.GunSkills[key] = Value[key] or false end
+        for _, key in pairs({"Z", "X"}) do _G.GunSkills[key] = Value[key] or false
+            end
     end
 })
 
-Window:SelectTab(1)
+Window:SelectTab(Tabs.HuntLeviathan)
