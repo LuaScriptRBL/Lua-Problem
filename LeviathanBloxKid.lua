@@ -307,7 +307,7 @@ end)
 
 
 --// UI Toggle
-Tabs.Main:AddToggle("AutoLeviathan", {
+Tabs.HuntLeviathan:AddToggle("AutoLeviathan", {
     Title = "Auto Attack Leviathan",
     Default = false,
     Callback = function(Value)
