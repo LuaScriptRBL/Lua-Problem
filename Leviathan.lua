@@ -1,18 +1,19 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/lastest/download/main.lua"))()
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local TS = game:GetService("TweenService")
 local RS = game:GetService("RunService")
-local Player = game.Players.LocalPlayer
-local replitcated = game:GetService("ReplitcatedStorage")
+local LP = game.Players.LocalPlayer
+local replicated = game:GetService("ReplicatedStorage")
 
 local Window = Fluent:CreateWindow({
-  Title = "Meow Hub"
-  Subtitle = "by _problemm"
-  TabWidth = 160,
-  Size = UDim2.fromOffset(500, 340),
-  Acrylic = false,
-  Theme = "Dark"
-  MinimizeKey = Erum.KeyCode.LeftControl
+    Title = "Ccc Hub",
+    SubTitle = "by meo",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(500, 340),
+    Acrylic = false,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
 })
+
 local ScreenGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 local Btn = Instance.new("ImageButton", ScreenGui)
 Btn.Size, Btn.Position, Btn.BackgroundTransparency = UDim2.new(0,60,0,60), UDim2.new(0,15,0.02,0), 1
@@ -20,12 +21,13 @@ Btn.Image = "https://www.roblox.com/asset-thumbnail/image?assetId=12747096303142
 Instance.new("UICorner", Btn).CornerRadius = UDim.new(1,0)
 Btn.MouseButton1Click:Connect(function() Window:Minimize() end)
 
+
 local Tabs = {
     HuntLeviathan = Window:AddTab({ Title = "Hunt Leviathan", Icon = "" }),
     SettingHunt = Window:AddTab({ Title = "Select And Hold Skill", Icon = "" })
 }
 local activeTween, freezeY = nil, nil
-local function CheckFrozenDimension()
+local function GetFrozenDimension()
 return workspace:FindFirstChild("_WorldOrigin") and workspace._WorldOrigin:FindFirstChild("Locations") and workspace._WorldOrigin.Locations:FindFirstChild("Frozen Dimension")
 end
 local function SetVelocity(part, enable)
@@ -216,7 +218,7 @@ do
 
 task.spawn(function()
     while task.wait(0.01) do
-        if CheckFrozenDimension() then
+        if GetFrozenDimension() then
             StatusParagraph:SetTitle("Frozen Dimension : ✅")
         else
             StatusParagraph:SetTitle("Frozen Dimension : Don't Spawn Yet")
