@@ -22,8 +22,9 @@ Instance.new("UICorner", Btn).CornerRadius = UDim.new(1,0)
 Btn.MouseButton1Click:Connect(function() Window:Minimize() end)
 
 local Tabs = {
+ SettingHunt = Window:AddTab({ Title = "Select And Hold Skill", Icon = "" }),
     HuntLeviathan = Window:AddTab({ Title = "Hunt Leviathan", Icon = "" }),
-    SettingHunt = Window:AddTab({ Title = "Select And Hold Skill", Icon = "" }),
+  
     Fruit = Window:AddTab({ Title = "Fruit", Icon = "" })
 }
 
@@ -94,6 +95,54 @@ _G.RunAllSkills = function()
     if _G.SelectedWeapons["Sword"] then ExecuteSkills(_G.SwordSkills, "Sword") end
     if _G.SelectedWeapons["Gun"] then ExecuteSkills(_G.GunSkills, "Gun") end
 end
+Tabs.Main:AddDropdown("WeaponSelect", {
+    Title = "Select Weapons",
+    Values = {"Melee", "Sword", "Blox Fruit", "Gun"},
+    Default = {},
+    Multi = true,
+    Callback = function(Value) _G.SelectedWeapons = Value end
+})
+
+Tabs.SettingHunt:AddDropdown("MeleeSkills", {
+    Title = "Melee Skills",
+    Values = {"Z", "X", "C", "V"},
+    Default = {"Z", "X", "C", "V"},
+    Multi = true,
+    Callback = function(Value)
+        for _, key in pairs({"Z", "X", "C", "V"}) do _G.MeleeSkills[key] = Value[key] or false end
+    end
+})
+
+Tabs.SettingHunt:AddDropdown("FruitSkills", {
+    Title = "Blox Fruit Skills",
+    Values = {"Z", "X", "C", "V", "F"},
+    Default = {"Z", "X", "C", "V", "F"},
+    Multi = true,
+    Callback = function(Value)
+        for _, key in pairs({"Z", "X", "C", "V", "F"}) do _G.FruitSkills[key] = Value[key] or false end
+    end
+})
+
+Tabs.SettingHunt:AddDropdown("SwordSkills", {
+    Title = "Sword Skills",
+    Values = {"Z", "X"},
+    Default = {"Z", "X"},
+    Multi = true,
+    Callback = function(Value)
+        for _, key in pairs({"Z", "X"}) do _G.SwordSkills[key] = Value[key] or false end
+    end
+})
+
+Tabs.SettingHunt:AddDropdown("GunSkills", {
+    Title = "Gun Skills",
+    Values = {"Z", "X"},
+    Default = {"Z", "X"},
+    Multi = true,
+    Callback = function(Value)
+        for _, key in pairs({"Z", "X"}) do _G.GunSkills[key] = Value[key] or false end
+    end
+})
+
 _G.AutoLeviathan = false
 local Speed = 350
 
@@ -313,62 +362,10 @@ Tabs.HuntLeviathan:AddToggle("AutoLeviathan", {
     Default = false,
     Callback = function(Value)
         _G.AutoLeviathan = Value
-        if Value then StartLeviathanFix()
-            end
-    end
-})
-
-Tabs.Main:AddDropdown("WeaponSelect", {
-    Title = "Select Weapons",
-    Values = {"Melee", "Sword", "Blox Fruit", "Gun"},
-    Default = {},
-    Multi = true,
-    Callback = function(Value) _G.SelectedWeapons = Value
+        if Value then StartLeviathanFix() 
         end
-})
-
-Tabs.SettingHunt:AddDropdown("MeleeSkills", {
-    Title = "Melee Skills",
-    Values = {"Z", "X", "C", "V"},
-    Default = {"Z", "X", "C", "V"},
-    Multi = true,
-    Callback = function(Value)
-        for _, key in pairs({"Z", "X", "C", "V"}) do _G.MeleeSkills[key] = Value[key] or false 
-            end
     end
 })
 
-Tabs.SettingHunt:AddDropdown("FruitSkills", {
-    Title = "Blox Fruit Skills",
-    Values = {"Z", "X", "C", "V", "F"},
-    Default = {"Z", "X", "C", "V", "F"},
-    Multi = true,
-    Callback = function(Value)
-        for _, key in pairs({"Z", "X", "C", "V", "F"}) do _G.FruitSkills[key] = Value[key] or false
-            end
-    end
-})
 
-Tabs.SettingHunt:AddDropdown("SwordSkills", {
-    Title = "Sword Skills",
-    Values = {"Z", "X"},
-    Default = {"Z", "X"},
-    Multi = true,
-    Callback = function(Value)
-        for _, key in pairs({"Z", "X"}) do _G.SwordSkills[key] = Value[key] or false
-            end
-    end
-})
-
-Tabs.SettingHunt:AddDropdown("GunSkills", {
-    Title = "Gun Skills",
-    Values = {"Z", "X"},
-    Default = {"Z", "X"},
-    Multi = true,
-    Callback = function(Value)
-        for _, key in pairs({"Z", "X"}) do _G.GunSkills[key] = Value[key] or false
-            end
-    end
-})
-
-Window:SelectTab(Tabs.HuntLeviathan)
+Window:SelectTab(1)
