@@ -246,7 +246,7 @@ Tabs.HuntLeviathan:AddButton({
 
             -- Tween (Giữ nguyên mục tiêu + Vector3(0, 5, 0) của bạn)
             local dist = (targetSeat.Position - hrp.Position).Magnitude
-            local tw = TS:Create(hrp, TweenInfo.new(dist / 350, Enum.EasingStyle.Linear), {CFrame = targetSeat.CFrame + Vector3.new(0, 5, 0)})
+            local activetween = TS:Create(hrp, TweenInfo.new(dist / 350, Enum.EasingStyle.Linear), {CFrame = targetSeat.CFrame + Vector3.new(0, 5, 0)})
             
             tw:Play()
             tw.Completed:Connect(function() 
