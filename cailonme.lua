@@ -3854,10 +3854,8 @@ end
 return Library
 local Window = Library:CreateWindow({
     Title = "Ccc Hub",
-    SubTitle = "by meo",
     TabWidth = 160,
     Size = UDim2.fromOffset(500, 340),
-    Acrylic = false,
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl
 })
