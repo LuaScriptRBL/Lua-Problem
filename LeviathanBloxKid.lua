@@ -3,7 +3,8 @@ local TS = game:GetService("TweenService")
 local RS = game:GetService("RunService")
 local LP = game.Players.LocalPlayer
 local replicated = game:GetService("ReplicatedStorage")
-
+local VIM = game:GetService("VirtualInputManager") -- Dùng để nhấn Space
+        
 local Window = Fluent:CreateWindow({
     Title = "Ccc Hub",
     SubTitle = "by meo",
@@ -99,71 +100,96 @@ local Speed = 350
 
 local function StartLeviathanFix()
     task.spawn(function()
-        local Character = game.Players.LocalPlayer.Character
-        local HRP = Character and Character:FindFirstChild("HumanoidRootPart")
-        if not HRP then return end
-
-        local BV = HRP:FindFirstChild("LeviVelocity") or Instance.new("BodyVelocity")
-        BV.Name = "LeviVelocity"
-        BV.MaxForce = Vector3.new(1e6, 1e6, 1e6)
-        BV.Velocity = Vector3.new(0, 0, 0)
-        BV.Parent = HRP
-        
-        local BG = HRP:FindFirstChild("LeviGyro") or Instance.new("BodyGyro")
-        BG.Name = "LeviGyro"
-        BG.MaxTorque = Vector3.new(1e6, 1e6, 1e6)
-        BG.P = 10000
-        BG.Parent = HRP
-
         while _G.AutoLeviathan do
             local Target = nil
-            local SeaBeasts = workspace.SeaBeasts:GetChildren()
             
-            for _, v in pairs(SeaBeasts) do
-                if v.Name == "Leviathan Segment" then
-                    Target = v:IsA("BasePart") and v or v:FindFirstChild("HumanoidRootPart")
-                    if Target then break end
-                end
-            end
-            
-            if not Target then
-                for _, v in pairs(SeaBeasts) do
-                    if v.Name == "Leviathan" then
+            -- Kiểm tra mục tiêu trong SeaBeasts
+            local SeaBeastsFolder = workspace:FindFirstChild("SeaBeasts")
+            if SeaBeastsFolder then
+                local Children = SeaBeastsFolder:GetChildren()
+                
+                -- Ưu tiên 1: Leviathan Segment
+                for _, v in pairs(Children) do
+                    if v.Name == "Leviathan Segment" then
                         Target = v:IsA("BasePart") and v or v:FindFirstChild("HumanoidRootPart")
                         if Target then break end
                     end
                 end
+                
+                -- Ưu tiên 2: Leviathan (Nếu không thấy Segment)
+                if not Target then
+                    for _, v in pairs(Children) do
+                        if v.Name == "Leviathan" then
+                            Target = v:IsA("BasePart") and v or v:FindFirstChild("HumanoidRootPart")
+                            if Target then break end
+                        end
+                    end
+                end
             end
 
+            -- CHỈ HOẠT ĐỘNG KHI CÓ TARGET (Leviathan hoặc Segment)
             if Target then
-                for _, part in pairs(Character:GetDescendants()) do
-                    if part:IsA("BasePart") then part.CanCollide = false end
-                end
+                local Character = game.Players.LocalPlayer.Character
+                local HRP = Character and Character:FindFirstChild("HumanoidRootPart")
+                local Hum = Character and Character:FindFirstChildOfClass("Humanoid")
 
-                local TargetPos = (Target.CFrame * CFrame.new(0, 45, 0)).Position 
-                local Distance = (HRP.Position - TargetPos).Magnitude
-                
-                if Distance > 5 then
-                    BV.Velocity = (TargetPos - HRP.Position).Unit * Speed
-                    BG.CFrame = CFrame.lookAt(HRP.Position, TargetPos)
-                else
-                    BV.Velocity = Vector3.new(0, 0, 0)
-                    HRP.CFrame = CFrame.new(TargetPos, Target.Position)
-                end
+                if HRP and Hum then
+                    -- Tự động nhảy khỏi ghế nếu đang ngồi
+                    if Hum.Sit then
+                        Hum.Sit = false
+                        Hum:ChangeState(Enum.HumanoidStateType.Jumping)
+                        task.wait(0.1)
+                    end
 
-                if (HRP.Position - Target.Position).Magnitude / 3.57 <= 20 and _G.RunAllSkills then
-                    _G.RunAllSkills()
+                    -- Khởi tạo lực di chuyển (BV/BG)
+                    local BV = HRP:FindFirstChild("LeviVelocity") or Instance.new("BodyVelocity")
+                    BV.Name = "LeviVelocity"
+                    BV.MaxForce = Vector3.new(1e6, 1e6, 1e6)
+                    BV.Parent = HRP
+                    
+                    local BG = HRP:FindFirstChild("LeviGyro") or Instance.new("BodyGyro")
+                    BG.Name = "LeviGyro"
+                    BG.MaxTorque = Vector3.new(1e6, 1e6, 1e6)
+                    BG.P = 10000
+                    BG.Parent = HRP
+
+                    -- NoClip
+                    for _, part in pairs(Character:GetDescendants()) do
+                        if part:IsA("BasePart") then part.CanCollide = false end
+                    end
+
+                    -- Logic di chuyển
+                    local TargetPos = (Target.CFrame * CFrame.new(0, 45, 0)).Position 
+                    local Distance = (HRP.Position - TargetPos).Magnitude
+                    
+                    if Distance > 5 then
+                        BV.Velocity = (TargetPos - HRP.Position).Unit * Speed
+                        BG.CFrame = CFrame.lookAt(HRP.Position, TargetPos)
+                    else
+                        BV.Velocity = Vector3.new(0, 0, 0)
+                        HRP.CFrame = CFrame.new(TargetPos, Target.Position)
+                    end
+
+                    -- Đánh khi cách 20m
+                    if (HRP.Position - Target.Position).Magnitude / 3.57 <= 20 and _G.RunAllSkills then
+                        _G.RunAllSkills()
+                    end
                 end
             else
-                BV.Velocity = BV.Velocity * 0.8
+                -- Nếu không thấy mục tiêu, chờ quét lại sau 1s (giúp tự động bay khi vừa ra đảo)
                 task.wait(0.1)
             end
             task.wait() 
         end
         
-        if BV then BV:Destroy() end
-        if BG then BG:Destroy() end
+        -- Dọn dẹp khi tắt
+        local Character = game.Players.LocalPlayer.Character
         if Character then
+            local HRP = Character:FindFirstChild("HumanoidRootPart")
+            if HRP then
+                if HRP:FindFirstChild("LeviVelocity") then HRP.LeviVelocity:Destroy() end
+                if HRP:FindFirstChild("LeviGyro") then HRP.LeviGyro:Destroy() end
+            end
             for _, v in pairs(Character:GetDescendants()) do
                 if v:IsA("BasePart") then v.CanCollide = true end
             end
@@ -171,32 +197,71 @@ local function StartLeviathanFix()
     end) 
 end
 
-do
-    Tabs.HuntLeviathan:AddButton({
-        Title = "Teleport To Your Boat",
-        Description = "",
-        Callback = function()
-            local targetSeat = nil
-            for _, b in pairs(workspace.Boats:GetChildren()) do
-                if b:FindFirstChild("Owner") and (tostring(b.Owner.Value) == LP.Name or b.Owner.Value == LP.UserId) then
-                    targetSeat = b:FindFirstChildWhichIsA("VehicleSeat", true)
-                    break
-                end
+
+Tabs.HuntLeviathan:AddButton({
+    Title = "Tween to Boat (Premium)",
+    Description = "Anti-Shake + Auto Jump + Noclip",
+    Callback = function()
+        local targetSeat = nil
+        -- Tìm thuyền chính chủ (Giữ nguyên logic của bạn)
+        for _, b in pairs(workspace.Boats:GetChildren()) do
+            if b:FindFirstChild("Owner") and (tostring(b.Owner.Value) == LP.Name or b.Owner.Value == LP.UserId) then
+                targetSeat = b:FindFirstChildWhichIsA("VehicleSeat", true)
+                break
             end
-            if targetSeat and LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then
-                local hrp = LP.Character.HumanoidRootPart
-                local dist = (targetSeat.Position - hrp.Position).Magnitude
-                local noclip = RS.Stepped:Connect(function()
+        end
+
+        if targetSeat and LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then
+            local hrp = LP.Character.HumanoidRootPart
+            local hum = LP.Character:FindFirstChildOfClass("Humanoid")
+            local isFlying = true
+
+            -- Kết nối Anti-Shake và Noclip liên tục
+            local noclip = RS.Stepped:Connect(function()
+                if isFlying and LP.Character then
+                    -- [THÊM] Anti-Shake: Giữ vận tốc bằng 0 để không bị rung lắc
+                    hrp.Velocity = Vector3.new(0, 0, 0)
+                    
+                    -- Noclip (Giữ nguyên logic của bạn)
                     for _, v in pairs(LP.Character:GetDescendants()) do
                         if v:IsA("BasePart") then v.CanCollide = false end
                     end
-                end)
-                local tw = TS:Create(hrp, TweenInfo.new(dist / 350, Enum.EasingStyle.Linear), {CFrame = targetSeat.CFrame + Vector3.new(0, 5, 0)})
-                tw:Play()
-                tw.Completed:Connect(function() noclip:Disconnect() end)
-            end
+                end
+            end)
+
+            -- [THÊM] Logic Kiểm tra ngồi nhầm và bay tiếp
+            task.spawn(function()
+                while isFlying and targetSeat and hum.SeatPart ~= targetSeat do
+                    -- Tự động nhảy nếu ngồi nhầm ghế khác trên đường bay
+                    if hum.SeatPart and hum.SeatPart ~= targetSeat then
+                        VIM:SendKeyEvent(true, Enum.KeyCode.Space, false, game)
+                        task.wait(0.05)
+                        VIM:SendKeyEvent(false, Enum.KeyCode.Space, false, game)
+                        task.wait(0.2)
+                    end
+                    task.wait()
+                end
+            end)
+
+            -- Tween (Giữ nguyên mục tiêu + Vector3(0, 5, 0) của bạn)
+            local dist = (targetSeat.Position - hrp.Position).Magnitude
+            local tw = TS:Create(hrp, TweenInfo.new(dist / 350, Enum.EasingStyle.Linear), {CFrame = targetSeat.CFrame + Vector3.new(0, 5, 0)})
+            
+            tw:Play()
+            tw.Completed:Connect(function() 
+                isFlying = false
+                noclip:Disconnect() 
+                -- Trả lại va chạm khi kết thúc
+                if LP.Character then
+                    for _, v in pairs(LP.Character:GetDescendants()) do
+                        if v:IsA("BasePart") then v.CanCollide = true end
+                    end
+                end
+            end)
         end
-    })
+    end
+})
+
 
 --- HÀM KIỂM TRA
 local function check_frozen()
@@ -224,7 +289,7 @@ task.spawn(function()
     end
 end)
 
-    local ToggleFind = Tabs.HuntLeviathan:AddToggle("Find", { Title = "Find Leviathan", Default = false })
+    local ToggleFind = Tabs.HuntLeviathan:AddToggle("Find", { Title = "Find Leviathan", Description = Find Until Frozen Dimension Spawn", Default = false })
     ToggleFind:OnChanged(function(Value)
         _G.Auto = Value
         if Value then
@@ -321,7 +386,7 @@ Tabs.HuntLeviathan:AddToggle("AutoLeviathan", {
 Tabs.SettingHunt:AddDropdown("WeaponSelect", {
     Title = "Select Weapons",
     Values = {"Melee", "Sword", "Blox Fruit", "Gun"},
-    Default = {},
+    Default = {"Melee", "Sword", "Blox Fruit", "Gun"},
     Multi = true,
     Callback = function(Value) _G.SelectedWeapons = Value 
     end
@@ -329,8 +394,8 @@ Tabs.SettingHunt:AddDropdown("WeaponSelect", {
 
 Tabs.SettingHunt:AddDropdown("MeleeSkills", {
     Title = "Melee Skills",
-    Values = {"Z", "X", "C", "V"},
-    Default = {"Z", "X", "C", "V"},
+    Values = {"Z", "X", "C"},
+    Default = {"Z", "X", "C"},
     Multi = true,
     Callback = function(Value)
         for _, key in pairs({"Z", "X", "C", "V"}) do _G.MeleeSkills[key] = Value[key] or false 
