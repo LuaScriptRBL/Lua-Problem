@@ -1,6 +1,6 @@
 -- source shared by araujozwx 
 
-if getgenv().Nousigi then 
+local Library = if getgenv().Nousigi then 
 	if game.CoreGui:FindFirstChild("Night Mystic GUI") then
 		for i, v in ipairs(game.CoreGui:GetChildren()) do
 			if string.find(v.Name,  "Night Mystic") then
