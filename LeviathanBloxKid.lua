@@ -198,7 +198,7 @@ local function StartLeviathanFix()
 end
 
 do
-Tabs.Test:AddButton({
+Tabs.HuntLeviathan:AddButton({
     Title = "Tween to Your Boat",
     Description = "",
     Callback = function()
