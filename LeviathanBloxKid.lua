@@ -197,72 +197,35 @@ local function StartLeviathanFix()
     end) 
 end
 
-
+do
 Tabs.HuntLeviathan:AddButton({
-    Title = "Tween to Boat (Premium)",
-    Description = "Anti-Shake + Auto Jump + Noclip",
-    Callback = function()
-        local targetSeat = nil
-        -- Tìm thuyền chính chủ (Giữ nguyên logic của bạn)
-        for _, b in pairs(workspace.Boats:GetChildren()) do
-            if b:FindFirstChild("Owner") and (tostring(b.Owner.Value) == LP.Name or b.Owner.Value == LP.UserId) then
-                targetSeat = b:FindFirstChildWhichIsA("VehicleSeat", true)
-                break
+        Title = "Teleport To Your Boat",
+        Description = "",
+        Callback = function()
+            local targetSeat = nil
+            for _, b in pairs(workspace.Boats:GetChildren()) do
+                if b:FindFirstChild("Owner") and (tostring(b.Owner.Value) == LP.Name or b.Owner.Value == LP.UserId) then
+                    targetSeat = b:FindFirstChildWhichIsA("VehicleSeat", true)
+                    break
+                end
             end
-        end
-
-        if targetSeat and LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then
-            local hrp = LP.Character.HumanoidRootPart
-            local hum = LP.Character:FindFirstChildOfClass("Humanoid")
-            local isFlying = true
-
-            -- Kết nối Anti-Shake và Noclip liên tục
-            local noclip = RS.Stepped:Connect(function()
-                if isFlying and LP.Character then
-                    -- [THÊM] Anti-Shake: Giữ vận tốc bằng 0 để không bị rung lắc
-                    hrp.Velocity = Vector3.new(0, 0, 0)
-                    
-                    -- Noclip (Giữ nguyên logic của bạn)
+            if targetSeat and LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then
+                local hrp = LP.Character.HumanoidRootPart
+                local dist = (targetSeat.Position - hrp.Position).Magnitude
+                local noclip = RS.Stepped:Connect(function()
                     for _, v in pairs(LP.Character:GetDescendants()) do
                         if v:IsA("BasePart") then v.CanCollide = false end
                     end
-                end
-            end)
-
-            -- [THÊM] Logic Kiểm tra ngồi nhầm và bay tiếp
-            task.spawn(function()
-                while isFlying and targetSeat and hum.SeatPart ~= targetSeat do
-                    -- Tự động nhảy nếu ngồi nhầm ghế khác trên đường bay
-                    if hum.SeatPart and hum.SeatPart ~= targetSeat then
-                        VIM:SendKeyEvent(true, Enum.KeyCode.Space, false, game)
-                        task.wait(0.05)
-                        VIM:SendKeyEvent(false, Enum.KeyCode.Space, false, game)
-                        task.wait(0.2)
-                    end
-                    task.wait()
-                end
-            end)
-
-            -- Tween (Giữ nguyên mục tiêu + Vector3(0, 5, 0) của bạn)
-            local dist = (targetSeat.Position - hrp.Position).Magnitude
-            local tw = TS:Create(hrp, TweenInfo.new(dist / 350, Enum.EasingStyle.Linear), {CFrame = targetSeat.CFrame + Vector3.new(0, 5, 0)})
-            
-            tw:Play()
-            tw.Completed:Connect(function() 
-                isFlying = false
-                noclip:Disconnect() 
-                -- Trả lại va chạm khi kết thúc
-                if LP.Character then
-                    for _, v in pairs(LP.Character:GetDescendants()) do
-                        if v:IsA("BasePart") then v.CanCollide = true end
-                    end
-                end
-            end)
+                end)
+                local tw = TS:Create(hrp, TweenInfo.new(dist / 350, Enum.EasingStyle.Linear), {CFrame = targetSeat.CFrame + Vector3.new(0, 5, 0)})
+                tw:Play()
+                hrp.Velocity = Vector3.new(0, 0, 0)
+                    
+                tw.Completed:Connect(function() noclip:Disconnect() end)
+            end
         end
-    end
-})
-
-
+    })
+    
 --- HÀM KIỂM TRA
 local function check_frozen()
     if game.Workspace:FindFirstChild("Frozen Dimension", true) then
