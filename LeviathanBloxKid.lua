@@ -50,7 +50,7 @@ local function SetVelocity(part, enable)
 end
 
 _G.SelectedWeapons = {}
-_G.MeleeSkills = {["Z"] = true, ["X"] = true, ["C"] = true, ["V"] = true}
+_G.MeleeSkills = {["Z"] = true, ["X"] = true, ["C"] = true}
 _G.FruitSkills = {["Z"] = true, ["X"] = true, ["C"] = true, ["V"] = true, ["F"] = true}
 _G.SwordSkills = {["Z"] = true, ["X"] = true}
 _G.GunSkills = {["Z"] = true, ["X"] = true}
@@ -252,7 +252,7 @@ task.spawn(function()
     end
 end)
 
-    local ToggleFind = Tabs.HuntLeviathan:AddToggle("Find", { Title = "Find Leviathan", Description = Find Until Frozen Dimension Spawn", Default = false })
+    local ToggleFind = Tabs.HuntLeviathan:AddToggle("Find", { Title = "Find Leviathan", Default = false })
     ToggleFind:OnChanged(function(Value)
         _G.Auto = Value
         if Value then
@@ -364,7 +364,7 @@ Tabs.SettingHunt:AddDropdown("MeleeSkills", {
         for _, key in pairs({"Z", "X", "C", "V"}) do _G.MeleeSkills[key] = Value[key] or false 
         end
     end
-})
+}) 
 
 Tabs.SettingHunt:AddDropdown("FruitSkills", {
     Title = "Blox Fruit Skills",
