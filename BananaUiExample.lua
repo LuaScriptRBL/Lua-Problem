@@ -660,7 +660,7 @@ Library:Notify({
 })
 
 -- Tabs
-local Setup = Window:AddTab("Name Tab")
+local TabAimbot = Window:AddTab("Name Tab")
 
 -- ===== Aimbot Tab =====
 local AimbotGroup = TabAimbot:AddLeftGroupbox("Section Name")
@@ -673,12 +673,7 @@ AimbotGroup:AddToggle("NameToggle", {
     end
 })
 
-AimbotGroup:AddToggle("WeaponEnhancementsToggle", {
-    Title = "Enable Weapon Enhancements",
-    Default = State.WeaponEnhancementsEnabled,
-    Callback = function(Value)
-        State.WeaponE
-WeaponsGroup:AddSlider({
+AimbotGroup:AddSlider({
     Title = "Slider Name,
     Min = 0.01,
     Max = 0.5,
