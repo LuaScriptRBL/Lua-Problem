@@ -687,7 +687,7 @@ AimbotGroup:AddSlider({
     end
 })
 
-WeaponsGroup:AddButton({
+AimbotGroup:AddButton({
     Title = "Button Name",
     Callback = function()
         applyNoRecoilOnce()
