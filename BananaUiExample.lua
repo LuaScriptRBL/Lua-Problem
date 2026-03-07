@@ -6,7 +6,7 @@
 -- NOTE: Use private servers / alt accounts. Risk of ban exists.
 
 -- Try load Banana UI
-local Library = loadstring(game:HttpGet("https://pastefy.app/Oiw0q6ZL/raw"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaScriptRBL/Lua-Problem/refs/heads/main/BananaUi.lua"))()
 
 if not Library then 
     warn("Banana UI load failed. Your executor may not support the provided URL.")
@@ -663,7 +663,7 @@ Library:Notify({
 local TabAimbot = Window:AddTab("Name Tab")
 
 -- ===== Aimbot Tab =====
-local AimbotGroup = TabAimbot:AddLeftGroupbox("Section Name")
+local AimbotGroup = TabAimbot:AddLeftGroupbox("SectionName")
 
 AimbotGroup:AddToggle("NameToggle", {
     Title = "Toggle Name",
