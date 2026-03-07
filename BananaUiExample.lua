@@ -648,9 +648,9 @@ end)
 
 -- ===== Banana UI =====
 local Window = Library:CreateWindow({
-    Title = "Night Slayer Hub",
-    Subtitle = "- Arsenal",
-    Image = "rbxassetid://137672958847663"
+    Title = "Banana Cat Hub",
+    Subtitle = "- Title Name",
+    Image = "rbxassetid://5009915812"
 })
 
 Library:Notify({
@@ -660,174 +660,26 @@ Library:Notify({
 })
 
 -- Tabs
-local TabAimbot = Window:AddTab("Aimbot")
-local TabESP = Window:AddTab("ESP")
-local TabMovement = Window:AddTab("Movement")
-local TabWeapons = Window:AddTab("Weapons")
-local TabJoin = Window:AddTab("Join Discord")
+local Setup = Window:AddTab("Name Tab")
 
 -- ===== Aimbot Tab =====
-local AimbotGroup = TabAimbot:AddLeftGroupbox("Aimbot Settings")
+local AimbotGroup = TabAimbot:AddLeftGroupbox("Section Name")
 
-AimbotGroup:AddToggle("AimbotToggle", {
-    Title = "Aimbot",
+AimbotGroup:AddToggle("NameToggle", {
+    Title = "Toggle Name",
     Default = State.Aimbot,
     Callback = function(Value)
         State.Aimbot = Value
     end
 })
 
-AimbotGroup:AddToggle("SilentAimToggle", {
-    Title = "Silent Aim",
-    Default = State.SilentAim,
-    Callback = function(Value)
-        State.SilentAim = Value
-    end
-})
-
-AimbotGroup:AddToggle("AimTeamCheckToggle", {
-    Title = "Team Check (don't aim teammates)",
-    Default = State.AimTeamCheck,
-    Callback = function(Value)
-        State.AimTeamCheck = Value
-    end
-})
-
-AimbotGroup:AddSlider({
-    Title = "FOV",
-    Min = 50,
-    Max = 600,
-    Default = Settings.AimFOV,
-    Callback = function(Value)
-        Settings.AimFOV = Value
-    end
-})
-
-AimbotGroup:AddSlider({
-    Title = "Distance",
-    Min = 200,
-    Max = 5000,
-    Default = Settings.AimDist,
-    Callback = function(Value)
-        Settings.AimDist = Value
-    end
-})
-
-AimbotGroup:AddSlider({
-    Title = "Smoothness",
-    Min = 1,
-    Max = 100,
-    Default = Settings.AimSmooth,
-    Callback = function(Value)
-        Settings.AimSmooth = Value
-    end
-})
-
-AimbotGroup:AddToggle("NoRecoilToggle", {
-    Title = "No Recoil (best-effort)",
-    Default = State.NoRecoil,
-    Callback = function(Value)
-        State.NoRecoil = Value
-    end
-})
-
--- ===== ESP Tab =====
-local ESPGroup = TabESP:AddLeftGroupbox("ESP Settings")
-
-ESPGroup:AddToggle("ESPToggle", {
-    Title = "Enable ESP (Highlights)",
-    Default = State.ESP,
-    Callback = function(Value)
-        State.ESP = Value
-        updateHighlightsState()
-    end
-})
-
-ESPGroup:AddToggle("ESPTeamCheckToggle", {
-    Title = "Team Check (hide teammates)",
-    Default = State.ESP_TeamCheck,
-    Callback = function(Value)
-        State.ESP_TeamCheck = Value
-        updateHighlightsState()
-    end
-})
-
-ESPGroup:AddToggle("ESPBoxToggle", {
-    Title = "Box ESP (Drawing)",
-    Default = State.ESP_Box and HAS_DRAWING or false,
-    Callback = function(Value)
-        if not HAS_DRAWING and Value then
-            Library:Notify({
-                Title = "Drawing unavailable",
-                Description = "Your executor may not support the Drawing API. Box ESP won't work.",
-                Duration = 5
-            })
-        end
-        State.ESP_Box = Value and HAS_DRAWING
-    end
-})
-
-ESPGroup:AddToggle("ESPNameToggle", {
-    Title = "Name ESP",
-    Default = State.ESP_Name,
-    Callback = function(Value)
-        State.ESP_Name = Value
-    end
-})
-
-ESPGroup:AddToggle("ESPDistanceToggle", {
-    Title = "Distance ESP",
-    Default = State.ESP_Distance,
-    Callback = function(Value)
-        State.ESP_Distance = Value
-    end
-})
-
--- ===== Movement Tab =====
-local MovementGroup = TabMovement:AddLeftGroupbox("Movement Settings")
-
-MovementGroup:AddToggle("WalkLockToggle", {
-    Title = "Lock WalkSpeed",
-    Default = State.WalkLock,
-    Callback = function(Value)
-        State.WalkLock = Value
-    end
-})
-
-MovementGroup:AddSlider({
-    Title = "WalkSpeed",
-    Min = Settings.WalkMin,
-    Max = Settings.WalkMax,
-    Default = Settings.WalkSpeed,
-    Callback = function(Value)
-        Settings.WalkSpeed = Value
-    end
-})
-
--- ===== Weapons Tab =====
-local WeaponsGroup = TabWeapons:AddLeftGroupbox("Weapon Enhancements")
-
-WeaponsGroup:AddToggle("WeaponEnhancementsToggle", {
+AimbotGroup:AddToggle("WeaponEnhancementsToggle", {
     Title = "Enable Weapon Enhancements",
     Default = State.WeaponEnhancementsEnabled,
     Callback = function(Value)
-        State.WeaponEnhancementsEnabled = Value
-    end
-})
-
-WeaponsGroup:AddToggle("RapidFireToggle", {
-    Title = "Rapid Fire (Fast Fire Rate)",
-    Default = State.RapidFire,
-    Callback = function(Value)
-        State.RapidFire = Value
-        if Value then
-            applyRapidFireOnce()
-        end
-    end
-})
-
+        State.WeaponE
 WeaponsGroup:AddSlider({
-    Title = "Fire Rate (delay in seconds)",
+    Title = "Slider Name,
     Min = 0.01,
     Max = 0.5,
     Decimal = 2,
@@ -840,44 +692,8 @@ WeaponsGroup:AddSlider({
     end
 })
 
-WeaponsGroup:AddToggle("InfiniteAmmoToggle", {
-    Title = "Infinite Ammo (auto-refill)",
-    Default = State.InfiniteAmmo,
-    Callback = function(Value)
-        State.InfiniteAmmo = Value
-    end
-})
-
-WeaponsGroup:AddSlider({
-    Title = "Ammo Value (refill amount)",
-    Min = 5,
-    Max = 999,
-    Default = Settings.AmmoValue,
-    Callback = function(Value)
-        Settings.AmmoValue = Value
-    end
-})
-
-WeaponsGroup:AddToggle("SpreadControlToggle", {
-    Title = "Spread Control (advanced)",
-    Default = State.SpreadControl,
-    Callback = function(Value)
-        State.SpreadControl = Value
-    end
-})
-
-WeaponsGroup:AddSlider({
-    Title = "Spread Value",
-    Min = 0,
-    Max = 50,
-    Default = Settings.SpreadValue,
-    Callback = function(Value)
-        Settings.SpreadValue = Value
-    end
-})
-
 WeaponsGroup:AddButton({
-    Title = "Apply No Recoil Now",
+    Title = "Button Name",
     Callback = function()
         applyNoRecoilOnce()
         Library:Notify({
@@ -888,49 +704,10 @@ WeaponsGroup:AddButton({
     end
 })
 
-WeaponsGroup:AddButton({
-    Title = "Run Infinite Ammo Now",
+AimbotGroup:AddButton({
+    Title = "Notification Test",
     Callback = function()
-        applyInfiniteAmmoOnce()
-        Library:Notify({
-            Title = "Infinite Ammo",
-            Description = "Attempted (best-effort).",
-            Duration = 3
-        })
-    end
-})
-
-WeaponsGroup:AddButton({
-    Title = "Apply Spread Control Now",
-    Callback = function()
-        applySpreadControlOnce()
-        Library:Notify({
-            Title = "Spread",
-            Description = "Attempted (best-effort).",
-            Duration = 3
-        })
-    end
-})
-
-WeaponsGroup:AddButton({
-    Title = "Apply Rapid Fire Now",
-    Callback = function()
-        applyRapidFireOnce()
-        Library:Notify({
-            Title = "Rapid Fire",
-            Description = "Applied (best-effort). Hold mouse to fire rapidly.",
-            Duration = 3
-        })
-    end
-})
-
--- ===== Misc Tab (Discord) =====
-local MiscGroup = TabMisc:AddLeftGroupbox("Information")
-
-MiscGroup:AddButton({
-    Title = "Discord (copy invite)",
-    Callback = function()
-        local invite = "https://discord.gg/dtn68z4xp"
+        local invite = "https://discord.gg/chuoihub"
         local ok2, err = pcall(function()
             if setclipboard then
                 setclipboard(invite)
@@ -942,21 +719,11 @@ MiscGroup:AddButton({
         end)
         if ok2 then
             Library:Notify({
-                Title = "Discord",
-                Description = "Invite copied to clipboard.",
+                Title = "Notification Test",
+                Description = "Your Description",
                 Duration = 4
             })
-        else
-            print("Discord invite:", invite)
-            Library:Notify({
-                Title = "Discord",
-                Description = "Couldn't copy to clipboard; invite printed to console.",
-                Duration = 4
-            })
-        end
-    end
-})
-
+        
 -- Final startup
 updateHighlightsState()
-print("Night Slayer Hub | Arsenal + Weapon Enhancements loaded. Banana UI active. (Fixed Infinite Ammo auto-refill)")
+print("Banana Hub Ui Test Loaded")
