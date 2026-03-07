@@ -650,7 +650,7 @@ end)
 local Window = Library:CreateWindow({
     Title = "Banana Cat Hub",
     Subtitle = "- Blox Fruits",
-    Image = "rbxassetid://5009915812"
+    Image = "rbxassetid://5009916777"
 })
 
 Library:Notify({
