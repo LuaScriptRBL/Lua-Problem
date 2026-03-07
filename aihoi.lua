@@ -6,7 +6,7 @@
 -- NOTE: Use private servers / alt accounts. Risk of ban exists.
 
 -- Try load Banana UI
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaScriptRBL/Lua-Problem/refs/heads/main/BananaUi.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/LuaScriptRBL/Lua-Problem/refs/heads/main/BananaNewUi.lua"))()
 
 if not Library then 
     warn("Banana UI load failed. Your executor may not support the provided URL.")
